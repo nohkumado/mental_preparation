@@ -70,4 +70,8 @@ class MotivationData
     return record;
   }
 
+  toJson() {
+
+  }
+
 }
