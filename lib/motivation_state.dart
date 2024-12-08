@@ -62,6 +62,9 @@ class MotivationState
       "sport": sport,
       "date": date.toIso8601String(),
       "data": data.record,
+      //TODO missing motivation
+      //TODO missing objectives
+      //TODO missing confiance
     };
     return json.encode(map);
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:preparation_mentale/provider/locale_notifier.dart';
 
 import 'generated/intl/messages_all.dart';
 import 'generated/l10n.dart';
@@ -42,13 +43,10 @@ Future<void> main() async {
  //   }
  // }
 class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Set the locale only once when the app starts
-    Future.microtask(() {
-      final locale = Localizations.localeOf(context);
-      ref.read(localeProvider.notifier).setLocale(locale);
-    });
 
     final locale = ref.watch(localeProvider);
     final motDataAsync = ref.watch(motivationDataProvider); // This is now AsyncValue
@@ -65,7 +63,22 @@ class MyApp extends ConsumerWidget {
           ],
           supportedLocales: S.delegate.supportedLocales,
           locale: locale.locale,
-          home: MentalPreparation(data: motData, onSave: _saveData()),
+          home:
+          Builder(builder: (BuildContext context)
+        {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final currentlocale = Localizations.localeOf(context);
+            final localeState = ref.read(localeProvider);
+            print("found locale : $locale vs $currentlocale/$localeState");
+            if (currentlocale != localeState.locale) {
+              ref.read(localeProvider.notifier).setLocale(currentlocale);
+            }
+          }
+          );
+          return MentalPreparation(data: motData);
+
+      })
+         ,
         );
       },
       loading: () {
@@ -85,9 +98,7 @@ class MyApp extends ConsumerWidget {
 }
 
 
-_saveData() {
-  print("Save something??");
-}
+
 
   //@override
   //Widget build(BuildContext context) {
@@ -107,9 +118,8 @@ _saveData() {
 
 class MentalPreparation extends ConsumerWidget {
   final MotivationData data;
-  final Function onSave;
 
-  MentalPreparation({required this.data, required this.onSave});
+  MentalPreparation({super.key, required this.data});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
