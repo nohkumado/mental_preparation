@@ -1,125 +1,174 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'generated/intl/messages_all.dart';
+import 'generated/l10n.dart';
+import 'motivation_data.dart';
+import 'motivation_item.dart';
+import 'motivation_service.dart';
+import 'rp_provider.dart';
+import 'storage_service.dart';
+
+
+
+Future<void> main() async {
+   Intl.defaultLocale = 'fr';
+  await initializeMessages('fr');
+  runApp(ProviderScope(child:MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
+ // class MyApp extends ConsumerWidget {
+ //   @override
+ //   Widget build(BuildContext context, WidgetRef ref) {
+ //      // Set the locale only once when the app starts
+ //     Future.microtask(() {
+ //       final locale = Localizations.localeOf(context);
+ //       ref.read(localeProvider.notifier).setLocale(locale);
+ //     });
+ //
+ //         final locale = ref.watch(localeProvider);
+ //     MotivationData  motData= ref.watch(motivationDataProvider);
+ //
+ //         return MaterialApp(
+ //           localizationsDelegates: [
+ //             S.delegate,
+ //             GlobalMaterialLocalizations.delegate,
+ //             GlobalWidgetsLocalizations.delegate,
+ //             GlobalCupertinoLocalizations.delegate,
+ //           ],
+ //           supportedLocales: S.delegate.supportedLocales,
+ //           locale: locale.locale,
+ //           home: MentalPreparation(data: motData,onSave: _saveData(),),
+ //         );
+ //   }
+ // }
+class MyApp extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Set the locale only once when the app starts
+    Future.microtask(() {
+      final locale = Localizations.localeOf(context);
+      ref.read(localeProvider.notifier).setLocale(locale);
+    });
+
+    final locale = ref.watch(localeProvider);
+    final motDataAsync = ref.watch(motivationDataProvider); // This is now AsyncValue
+
+    return motDataAsync.when(
+      data: (motData) {
+        // When the data is available, render the UI
+        return MaterialApp(
+          localizationsDelegates: [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+          locale: locale.locale,
+          home: MentalPreparation(data: motData, onSave: _saveData()),
+        );
+      },
+      loading: () {
+        // You can show a loading indicator while waiting for data
+        return CircularProgressIndicator();
+      },
+      error: (error, stack) {
+        // You can handle errors here, such as showing a message
+        return Scaffold(
+          body: Center(
+            child: Text('Error: $error'),
+          ),
+        );
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
+_saveData() {
+  print("Save something??");
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  //@override
+  //Widget build(BuildContext context) {
+  //  return Scaffold(
+  //    appBar: AppBar(
+  //      title: Text('Motivation Form'),
+  //    ),
+  //    body: _data.isEmpty
+  //        ? Center(child: CircularProgressIndicator())
+  //        : MotivationFormWidget(data: _data, onSave: _saveData),
+  //    floatingActionButton: FloatingActionButton(
+  //      onPressed: _saveData,
+  //      child: Icon(Icons.save),
+  //    ),
+  //  );
+  //}
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class MentalPreparation extends ConsumerWidget {
+  final MotivationData data;
+  final Function onSave;
+
+  MentalPreparation({required this.data, required this.onSave});
 
   @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Form(
+      child: ListView.builder(
+        itemCount: data.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Text(data[index].label),
+                  Text(data[index].caption),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Slider(
+                          value: data[index].note.toDouble(),
+                          min: 0,
+                          max: 10,
+                          divisions: 10,
+                          label: data[index].note.toString(),
+                          onChanged: (value) {
+                            data[index].note = value.toInt();
+                          },
+                        ),
+                      ),
+                      Text(data[index].note.toString()),
+                    ],
+                  ),
+                  TextFormField(
+                    initialValue: data[index].commentary,
+                    decoration: InputDecoration(
+                      labelText: 'Commentaire',
+                    ),
+                    onChanged: (value) {
+                      data[index].commentary = value;
+                    },
+                  ),
+                  Text(data[index].recipe),
+                  TextFormField(
+                    initialValue: data[index].action,
+                    decoration: InputDecoration(
+                      labelText: 'Action',
+                    ),
+                    onChanged: (value) {
+                      data[index].action = value;
+                    },
+                  ),
+                ],
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
