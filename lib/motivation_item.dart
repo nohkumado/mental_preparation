@@ -17,12 +17,12 @@ class MotivationItem {
 
   static fromJson(Map<String, dynamic> json) {
     return MotivationItem(
-      label: json['label'],
-      caption: json['caption'],
-      note: json['note'],
-      commentary: json['commentary'],
-      recipe: json['recipe'],
-      action: json['action'],
+      label: json['label'] ??"",
+      caption: json['caption']??"",
+      note: json['note']??-1,
+      commentary: json['commentary']??"",
+      recipe: json['recipe']??"",
+      action: json['action']??"",
     );
   }
 }
