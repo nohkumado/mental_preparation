@@ -1,0 +1,183 @@
+{
+  "@@locale": "en",
+  "@autonomy_label": {
+    "description": "Label for autonomy",
+    "type": "text",
+    "placeholders": {}
+  },
+  "autonomy_label": "AUTONOMY",
+  "@autonomy_caption": {
+    "description": "Caption for autonomy",
+    "type": "text",
+    "placeholders": {}
+  },
+  "autonomy_caption": "On a scale of 0 to 10 NOTE\nTo what extent do you feel autonomous in your sports practice, in your training, and in the way you practice your sport?\n0 = not at all autonomous, permanent feeling of constraint 10 = total feeling of autonomy.",
+  "@autonomy_recipe": {
+    "description": "Recipe for autonomy",
+    "type": "text",
+    "placeholders": {}
+  },
+  "autonomy_recipe": "adjust the instructions given to leave choices",
+
+  "@competence_label": {
+    "description": "Label for competence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "competence_label": "COMPETENCE",
+  "@competence_caption": {
+    "description": "Caption for competence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "competence_caption": "Do you think you have acquired a significant number of skills to be able to practice your sport at the level you are at today?\n0 = I have hardly acquired any real skills to practice the sport at the level I am at today 10 = I have acquired solid skills to be at the level I am at today",
+  "@competence_recipe": {
+    "description": "Recipe for competence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "competence_recipe": "become fully aware of your skills, visualize them",
+
+  "@appartenance_label": {
+    "description": "Label for belonging",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appartenance_label": "BELONGING",
+  "@appartenance_caption": {
+    "description": "Caption for belonging",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appartenance_caption": "To what extent do you feel close to your club/team/coach (as applicable) today?\n0 = not at all close, I am not known 10 = like a second family",
+  "@appartenance_recipe": {
+    "description": "Recipe for belonging",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appartenance_recipe": "make sure to be appreciated for who you are and not just for the results you deliver",
+
+  "@plaisir_label": {
+    "description": "Label for pleasure",
+    "type": "text",
+    "placeholders": {}
+  },
+  "plaisir_label": "PLEASURE",
+  "@plaisir_caption": {
+    "description": "Caption for pleasure",
+    "type": "text",
+    "placeholders": {}
+  },
+  "plaisir_caption": "What is your level of pleasure when you practice your sport today?\n0 = I have no pleasure in my sports practice 10 = I experience a lot of pleasure when I train or compete",
+  "@plaisir_recipe": {
+    "description": "Recipe for pleasure",
+    "type": "text",
+    "placeholders": {}
+  },
+  "plaisir_recipe": "re-establish the causes of the pleasure already felt, or identify and implement what would allow you to feel it",
+
+  "@progres_label": {
+    "description": "Label for progress",
+    "type": "text",
+    "placeholders": {}
+  },
+  "progres_label": "PROGRESS",
+  "@progres_caption": {
+    "description": "Caption for progress",
+    "type": "text",
+    "placeholders": {}
+  },
+  "progres_caption": "Do you feel like you are progressing or stagnating in your sport today?\n0 = I am stagnating completely 10 = I am making incredible progress",
+  "@progres_recipe": {
+    "description": "Recipe for progress",
+    "type": "text",
+    "placeholders": {}
+  },
+  "progres_recipe": "implement progression programs, skill acquisition, with milestones and visualize each completed step",
+
+  "@engagement_label": {
+    "description": "Label for engagement",
+    "type": "text",
+    "placeholders": {}
+  },
+  "engagement_label": "ENGAGEMENT",
+  "@engagement_caption": {
+    "description": "Caption for engagement",
+    "type": "text",
+    "placeholders": {}
+  },
+  "engagement_caption": "When it's time for training, do you feel naturally highly motivated or do you need to show willpower to get started?\n0 = if I listen to myself, I won't train, I'll do something else! 10 = I always want to train!",
+  "@engagement_recipe": {
+    "description": "Recipe for engagement",
+    "type": "text",
+    "placeholders": {}
+  },
+  "engagement_recipe": "give meaning to the action by linking it to one of the person's motivational ingredients",
+
+  "@sens_label": {
+    "description": "Label for fundamental sense",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sens_label": "FUNDAMENTAL SENSE",
+  "@sens_caption": {
+    "description": "Caption for fundamental sense",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sens_caption": "Do you know why you practice this sport and can you list everything that makes your practice really important to you in your life?\n0 = I have never asked myself this kind of question! 10 = I can make a precise list of the fundamental reasons why I practice this sport and how it exactly corresponds to what is important in life",
+  "@sens_recipe": {
+    "description": "Recipe for fundamental sense",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sens_recipe": "huh?",
+  "@sentiment": {
+    "description": "Sentiment column header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sentiment": "Sentiment",
+  "@note": {
+    "description": "Note column header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "note": "Note",
+  "@niveau": {
+    "description": "Level column header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "niveau": "Level",
+  "@action": {
+    "description": "Action column header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "action": "Action",
+  "@retour": {
+    "description": "Commentary column header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "retour": "Commentary",
+  "@scale_note": {
+    "description": "Scale note text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scale_note": "/10",
+  "@level_text": {
+    "description": "Level text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "level_text": "Level",
+  "@state_text": {
+    "description": "State text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "state_text": "State"
+}

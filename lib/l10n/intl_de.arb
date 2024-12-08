@@ -1,0 +1,87 @@
+{
+  "@@locale": "de",
+  "@autonomy_label": {
+    "description": "Label for autonomy",
+    "type": "text",
+    "placeholders": {}
+  },
+  "autonomy_label": "AUTONOMIE",
+  "@autonomy_caption": {
+    "description": "Caption for autonomy",
+    "type": "text",
+    "placeholders": {}
+  },
+  "autonomy_caption": "Auf einer Skala von 0 bis 10 NOTE\nIn welchem Maße fühlst du dich in deiner sportlichen Praxis, in deinem Training und in der Art und Weise, wie du deinen Sport ausübst, autonom?\n0 = überhaupt nicht autonom, dauerhaftes Gefühl der Einschränkung 10 = vollständiges Gefühl der Autonomie.",
+  "@autonomy_recipe": {
+    "description": "Recipe for autonomy",
+    "type": "text",
+    "placeholders": {}
+  },
+  "autonomy_recipe": "die Anweisungen anpassen, um Wahlmöglichkeiten zu lassen",
+  "@competence_label": {
+    "description": "Label for competence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "competence_label": "KOMPETENZ",
+  "@competence_caption": {
+    "description": "Caption for competence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "competence_caption": "Glaubst du, dass du eine große Anzahl an Fähigkeiten erworben hast, um deinen Sport auf dem Niveau, das du heute hast, auszuüben?\n0 = ich habe fast keine echten Fähigkeiten erworben, um den Sport auf dem Niveau, das ich heute habe, auszuüben 10 = ich habe solide Fähigkeiten erworben, um auf dem Niveau zu sein, das ich heute habe",
+  "@competence_recipe": {
+    "description": "Recipe for competence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "competence_recipe": "wirklich bewusst werden deiner Fähigkeiten, sie visualisieren",
+  "@sentiment": {
+    "description": "Sentiment column header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sentiment": "Gefühl",
+  "@note": {
+    "description": "Note column header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "note": "Note",
+  "@niveau": {
+    "description": "Level column header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "niveau": "Stufe",
+  "@action": {
+    "description": "Action column header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "action": "Aktion",
+  "@retour": {
+    "description": "Commentary column header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "retour": "Kommentar",
+  "@scale_note": {
+    "description": "Scale note text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scale_note": "/10",
+  "@level_text": {
+    "description": "Level text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "level_text": "Stufe",
+  "@state_text": {
+    "description": "State text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "state_text": "Zustand"
+}
