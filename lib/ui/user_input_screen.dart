@@ -38,7 +38,6 @@ void initState() {
   Widget build(BuildContext context) {
   //print("Rebuilding UserInputScreen");
     MotivationState userState = ref.watch(userInputProvider);
-    print("UserState : $userState");
     final dbState = ref.watch(dataBaseProvider);
     final motivationStatesAsync = ref.watch(motivationStatesProvider);
     return  Column(

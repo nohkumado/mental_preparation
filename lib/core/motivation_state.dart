@@ -160,4 +160,5 @@ class MotivationState
     date.hashCode ^
     data.hashCode;
   }
+
 }

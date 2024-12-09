@@ -84,7 +84,7 @@
     "placeholders": {}
   },
   "state_text": "Zustand",
-  "title": "Geisitge Vorbereitung für Sportler",
+  "title": "Geistige Vorbereitung für Sportler",
   "name_label": "Vorname",
   "family_name_label": "Name",
   "save": "Speichern",
@@ -93,5 +93,6 @@
   "form_validation_error": "Fehler im Formular",
   "data_saved_successfully": "Daten erfolgreich gespeichert",
   "error_saving_data": "Fehler beim Speichern der Daten",
-  "select_user": "Benutzer auswählen"
+  "select_user": "Benutzer auswählen",
+  "questionnaire_titre": "Geistige Vorbereitung für"
 }
