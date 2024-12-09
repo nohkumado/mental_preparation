@@ -1,11 +1,13 @@
 import 'package:preparation_mentale/generated/l10n.dart';
-import 'package:preparation_mentale/motivation_item.dart';
+import 'package:preparation_mentale/core/motivation_item.dart';
 
 class MotivationData
 {
   List<MotivationItem> record = [];
 
   get length => record.length;
+
+  bool get isEmpty => record.isEmpty;
   operator [](int index) => record[index];
 
   List<MotivationItem> build(S loc) {
@@ -71,7 +73,22 @@ class MotivationData
   }
 
   toJson() {
-
+    return record;
   }
 
+  static MotivationData fromMap(map)
+  {
+    MotivationData motivationData = MotivationData();
+    motivationData.record = map['record']?.map((e) => MotivationItem.fromJson(e))?.toList()?? [];
+    return motivationData;
+  }
+
+  @override
+  String toString() {
+    StringBuffer res = StringBuffer();
+    for (MotivationItem item in record) {
+      res.writeln('${item}');
+    }
+    return res.toString();
+  }
 }

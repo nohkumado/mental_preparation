@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'motivation_item.dart';
+import 'core/motivation_item.dart';
 
 class MotivationForm extends StatefulWidget {
   @override

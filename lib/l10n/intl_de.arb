@@ -83,5 +83,15 @@
     "type": "text",
     "placeholders": {}
   },
-  "state_text": "Zustand"
+  "state_text": "Zustand",
+  "title": "Geisitge Vorbereitung für Sportler",
+  "name_label": "Vorname",
+  "family_name_label": "Name",
+  "save": "Speichern",
+  "fetch_users": "Lesen",
+  "sport": "sport",
+  "form_validation_error": "Fehler im Formular",
+  "data_saved_successfully": "Daten erfolgreich gespeichert",
+  "error_saving_data": "Fehler beim Speichern der Daten",
+  "select_user": "Benutzer auswählen"
 }

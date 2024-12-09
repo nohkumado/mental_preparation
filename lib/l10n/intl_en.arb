@@ -179,5 +179,15 @@
     "type": "text",
     "placeholders": {}
   },
-  "state_text": "State"
+  "state_text": "State",
+  "title": "mental preparation",
+  "name_label": "pre name",
+  "family_name_label": "Name",
+  "save": "Save",
+  "fetch_users": "Load",
+  "sport": "sport",
+  "form_validation_error": "Error in the form",
+  "data_saved_successfully": "Data data saved successfully",
+  "error_saving_data": "Error saving data",
+  "select_user": "select user "
 }

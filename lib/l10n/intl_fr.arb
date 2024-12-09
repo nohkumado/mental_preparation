@@ -179,6 +179,15 @@
     "type": "text",
     "placeholders": {}
   },
-  "state_text": "État"
-
+  "state_text": "État",
+  "title": "Préparation mentale",
+  "name_label": "prénom",
+  "family_name_label": "Nom",
+  "save": "Sauvergarde",
+  "fetch_users": "Charge",
+  "sport": "sport",
+  "form_validation_error": "Erreur dans le formulaire",
+  "data_saved_successfully": "Données sauvegardées",
+  "error_saving_data": "Erreur lors de la sauvegarde des données",
+  "select_user": "sélectionner Utilisateur "
 }

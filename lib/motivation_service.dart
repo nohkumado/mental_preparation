@@ -1,4 +1,4 @@
-import 'motivation_item.dart';
+import 'core/motivation_item.dart';
 
 class MotivationService {
   void mergeActions(List<MotivationItem> data, Map<String, String> actions) {

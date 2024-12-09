@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:preparation_mentale/motivation_item.dart';
+import 'package:preparation_mentale/core/motivation_item.dart';
 
 void main() {
   group('MotivationItem', () {

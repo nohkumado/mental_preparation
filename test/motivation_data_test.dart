@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:preparation_mentale/generated/l10n.dart';
-import 'package:preparation_mentale/motivation_data.dart';
+import 'package:preparation_mentale/core/motivation_data.dart';
 
 void main() {
   late MockS loc;

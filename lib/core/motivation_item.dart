@@ -1,3 +1,5 @@
+import 'package:preparation_mentale/core/motivation_data.dart';
+
 class MotivationItem {
   String label;
   String caption;
@@ -24,5 +26,21 @@ class MotivationItem {
       recipe: json['recipe']??"",
       action: json['action']??"",
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'label': label,
+      'caption': caption,
+      'note': note,
+      'commentary': commentary,
+      'recipe': recipe,
+      'action': action,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'MotivationItem{label: $label, caption: $caption, note: $note, commentary: $commentary, recipe: $recipe, action: $action}';
   }
 }
