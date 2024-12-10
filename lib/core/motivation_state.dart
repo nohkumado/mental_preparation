@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:preparation_mentale/core/motivation_data.dart';
+import 'package:preparation_mentale/generated/l10n.dart';
+
+import 'motivation_item.dart';
 
 
 enum Henji  {yes, no, maybe,wakaran}
@@ -14,6 +17,8 @@ class MotivationState
   DateTime date = DateTime.now();
   bool empty = true;
   MotivationData data = MotivationData();
+
+  Map<Motivations,MotivationItemLabels>? labels;
   //default CTOR
   MotivationState({
     this.name = "",
@@ -161,4 +166,45 @@ class MotivationState
     data.hashCode;
   }
 
+  Map<Motivations,MotivationItemLabels> initLabels(loc)
+  {
+      labels =  {
+        Motivations.autonomy: MotivationItemLabels(
+          label: loc.autonomy_label,
+          caption: loc.autonomy_caption,
+          recipe: loc.autonomy_recipe,
+        ),
+        Motivations.competence: MotivationItemLabels(
+          label: loc.competence_label,
+          caption: loc.competence_caption,
+          recipe: loc.competence_recipe,
+        ),
+        Motivations.belonging:MotivationItemLabels(
+          label: loc.appartenance_label,
+          caption: loc.appartenance_caption,
+          recipe: loc.appartenance_recipe,
+        ),
+        Motivations.pleasure:MotivationItemLabels(
+          label: loc.plaisir_label,
+          caption: loc.plaisir_caption,
+          recipe: loc.plaisir_recipe,
+        ),
+        Motivations.progress:MotivationItemLabels(
+          label: loc.progres_label,
+          caption: loc.progres_caption,
+          recipe: loc.progres_recipe,
+        ),
+        Motivations.engagement:MotivationItemLabels(
+          label: loc.engagement_label,
+          caption: loc.engagement_caption,
+          recipe: loc.engagement_recipe,
+        ),
+        Motivations.meaning:MotivationItemLabels(
+          label: loc.sens_label,
+          caption: loc.sens_caption,
+          recipe: loc.sens_recipe,
+        ),
+      };
+    return labels!;
+  }
 }

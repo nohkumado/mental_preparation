@@ -90,8 +90,8 @@ void initState() {
                 controllers["name"]?.text = newValue.name;
                 controllers["familyname"]?.text = newValue.familyname;
                 controllers["sport"]?.text = newValue.sport;
-                if(newValue.data.isEmpty){
-                  newValue.data.build(S.of(context));
+                if(newValue.labels == null || newValue.labels!.isEmpty){
+                  newValue.initLabels(S.of(context));
                 }
                 ref.read(userInputProvider.notifier).update(newValue);
                 ref.read(dataBaseProvider.notifier).upsertMotivationState(newValue);

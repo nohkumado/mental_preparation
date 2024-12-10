@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:preparation_mentale/core/motivation_item.dart';
 import 'package:preparation_mentale/provider/user_input_notifier.dart';
 import 'package:preparation_mentale/rp_provider.dart';
 
@@ -17,6 +18,8 @@ class QuestionnaireGeneral extends ConsumerWidget {
     //final MotivationData data = ref.watch(motivationDataProvider);
    //print("retrieved $data " );
     MotivationState userState = ref.watch(userInputProvider);
+    Map<Motivations,MotivationItemLabels> labels = userState.labels ?? userState.initLabels(S.of(context));
+
     DateFormat formater = DateFormat("yyyy-MM-dd");
     return Column(
       children: [
@@ -32,52 +35,52 @@ class QuestionnaireGeneral extends ConsumerWidget {
           child:
           Form(
             child: ListView.builder(
-              itemCount: userState.data.length,
+              itemCount: Motivations.values.length,
               itemBuilder: (context, index) {
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        Text(userState.data[index].label),
-                        Text(userState.data[index].caption),
+                        Text(labels[Motivations.values[index]]!.label),
+                        Text(labels[Motivations.values[index]]!.caption),
                         Row(
                           children: [
                             Expanded(
                               child: Slider(
-                                value: userState.data[index].note.toDouble(),
+                                value: userState.data[Motivations.values[index]].note.toDouble(),
                                 min: 0,
                                 max: 10,
                                 divisions: 10,
-                                label: userState.data[index].note.toString(),
+                                label: userState.data[Motivations.values[index]].note.toString(),
                                 onChanged: (value) {
-                                  ref.read(userInputProvider.notifier).chgNote(index, value.toInt());
-                                  userState.data[index].note = value.toInt();
+                                  ref.read(userInputProvider.notifier).chgNote(Motivations.values[index], value.toInt());
+                                  userState.data[Motivations.values[index]].note = value.toInt();
                                 },
                               ),
                             ),
-                            Text(userState.data[index].note.toString()),
+                            Text(userState.data[Motivations.values[index]].note.toString()),
                           ],
                         ),
                         TextFormField(
-                          initialValue: userState.data[index].commentary,
+                          initialValue: userState.data[Motivations.values[index]].commentary,
                           decoration: InputDecoration(
                             labelText: 'Commentaire',
                           ),
                           onChanged: (value) {
-                            ref.read(userInputProvider.notifier).chgText(i:index, type:txtFields.comment, val:  value);
-                            userState.data[index].commentary = value;
+                            ref.read(userInputProvider.notifier).chgText(i:Motivations.values[index], type:txtFields.comment, val:  value);
+                            userState.data[Motivations.values[index]].commentary = value;
                           },
                         ),
-                        Text(userState.data[index].recipe),
+                        Text(labels[Motivations.values[index]]!.recipe),
                         TextFormField(
-                          initialValue: userState.data[index].action,
+                          initialValue: userState.data[Motivations.values[index]].action,
                           decoration: InputDecoration(
                             labelText: 'Action',
                           ),
                           onChanged: (value) {
-                            ref.read(userInputProvider.notifier).chgText(i:index, type:txtFields.action, val:  value);
-                            userState.data[index].action = value;
+                            ref.read(userInputProvider.notifier).chgText(i:Motivations.values[index], type:txtFields.action, val:  value);
+                            userState.data[Motivations.values[index]].action = value;
                           },
                         ),
                       ],

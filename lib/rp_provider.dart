@@ -34,13 +34,8 @@ Future<S> lookupAppLocalizations(Locale locale) async {
 //   return MotivationData()..build(appLocalizations);
 // });
 final motivationDataProvider = StateNotifierProvider<MotivationDataNotifier, MotivationData>((ref)
-{
-final notifier = MotivationDataNotifier();
-// Listen to changes in the localeProvider
-ref.listen<LocaleState>(localeProvider, (previous, next) =>notifier.chLoc(next.locale)); // Update data when locale changes
-
-return notifier;
-});
+=> MotivationDataNotifier()
+);
 
 final userInputProvider = StateNotifierProvider<UserInputNotifier, MotivationState>((ref) {
   return UserInputNotifier();

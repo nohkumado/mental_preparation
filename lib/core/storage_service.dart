@@ -39,17 +39,3 @@ class StorageService {
     }
   }
 }
-
-extension JsonConversion on MotivationItem {
-  Map<String, dynamic> toJson() {
-    return {
-      'label': label,
-      'caption': caption,
-      'note': note,
-      'commentary': commentary,
-      'recipe': recipe,
-      'action': action,
-    };
-  }
-
-}

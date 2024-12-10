@@ -6,18 +6,12 @@ void main() {
     test('constructor sets fields correctly', () {
       // Arrange
       final motivationItem = MotivationItem(
-        label: 'Autonomy',
-        caption: 'How autonomous do you feel?',
         note: 8,
-        recipe: 'Allow more flexibility',
         action: 'Increase independence',
       );
 
       // Assert
-      expect(motivationItem.label, 'Autonomy');
-      expect(motivationItem.caption, 'How autonomous do you feel?');
       expect(motivationItem.note, 8);
-      expect(motivationItem.recipe, 'Allow more flexibility');
       expect(motivationItem.action, 'Increase independence');
       expect(motivationItem.commentary, ''); // Default value
     });

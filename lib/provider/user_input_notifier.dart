@@ -1,5 +1,6 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:preparation_mentale/core/motivation_data.dart';
 import 'package:preparation_mentale/core/motivation_state.dart';
 
 enum  txtFields { comment, action}
@@ -18,16 +19,16 @@ class UserInputNotifier extends StateNotifier<MotivationState> {
     // ... database operations
   }
 
-  void chgNote(int index, int val)
+  void chgNote(Motivations index, int val)
   {
-    state.data.record[index].note = val;
+    state.data.record[index]!.note = val;
     state = state.copyWith();
   }
 
-  void chgText({required int i, txtFields type = txtFields.comment, required String val})
+  void chgText({required Motivations i, txtFields type = txtFields.comment, required String val})
   {
-    if(type == txtFields.comment) state.data.record[i].commentary = val;
-    else if(type == txtFields.action) state.data.record[i].action = val;
+    if(type == txtFields.comment) state.data.record[i]!.commentary = val;
+    else if(type == txtFields.action) state.data.record[i]!.action = val;
   }
 
 
