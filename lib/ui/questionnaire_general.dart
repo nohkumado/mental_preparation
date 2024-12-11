@@ -8,6 +8,7 @@ import 'package:preparation_mentale/rp_provider.dart';
 import '../core/motivation_data.dart';
 import '../core/motivation_state.dart';
 import '../generated/l10n.dart';
+import 'motivation_item_labels.dart';
 
 class QuestionnaireGeneral extends ConsumerWidget {
 
@@ -18,7 +19,7 @@ class QuestionnaireGeneral extends ConsumerWidget {
     //final MotivationData data = ref.watch(motivationDataProvider);
    //print("retrieved $data " );
     MotivationState userState = ref.watch(userInputProvider);
-    Map<Motivations,MotivationItemLabels> labels = userState.labels ?? userState.initLabels(S.of(context));
+    Map<Motivations,MotivationItemLabels> labels = MotivationItemLabels.labels ?? MotivationItemLabels.initLabels(S.of(context));
 
     DateFormat formater = DateFormat("yyyy-MM-dd");
     return Column(
@@ -92,8 +93,9 @@ class QuestionnaireGeneral extends ConsumerWidget {
           )
         ),
         ElevatedButton(onPressed: () {
+          print("about to save $userState");
           //ref.read(userInputProvider.notifier).saveToDatabase();
-          ref.read(dataBaseProvider.notifier).insertMotivationState(userState).then((_) {
+          ref.read(dataBaseProvider.notifier).upsertMotivationState(userState).then((_) {
             // Handle successful insertion
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(S.of(context).data_saved_successfully)),

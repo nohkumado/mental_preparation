@@ -1,4 +1,3 @@
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:preparation_mentale/core/motivation_data.dart';
 import 'package:preparation_mentale/core/motivation_state.dart';
@@ -7,6 +6,7 @@ enum  txtFields { comment, action}
 class UserInputNotifier extends StateNotifier<MotivationState> {
   UserInputNotifier() : super(MotivationState());
 
+  void updateId(int id) { state = state.copyWith(id: id); }
   void updateName(String name) { state = state.copyWith(name: name); }
   void updateFamilyname(String value) { state = state.copyWith(familyname: value); }
   void updateSport(String value) { state = state.copyWith(sport: value); }

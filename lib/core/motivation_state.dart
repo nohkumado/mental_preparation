@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:preparation_mentale/core/motivation_data.dart';
-import 'package:preparation_mentale/generated/l10n.dart';
 
+import '../ui/motivation_item_labels.dart';
 import 'motivation_item.dart';
 
 
@@ -18,9 +18,11 @@ class MotivationState
   bool empty = true;
   MotivationData data = MotivationData();
 
-  Map<Motivations,MotivationItemLabels>? labels;
+
+  int id = -1;
   //default CTOR
   MotivationState({
+    this.id = -1,
     this.name = "",
     this.familyname = "",
     this.sport = "",
@@ -31,11 +33,10 @@ class MotivationState
 
   @override
   String toString() {
-    return 'MotivationState{name: $name, familyname: $familyname, sport: $sport, date: $date, empty: $empty, data: $data}';
+    return 'MotivationState[$id]{name: $name, familyname: $familyname, sport: $sport, date: $date, empty: $empty, data: $data}';
   } // building from incoming map
-  @override
   String dbIdString() {
-    return '$name $familyname ($sport) @ $date';
+    return '[$id]$name $familyname ($sport) @ $date';
   } // building from incoming map
   MotivationState.fromMap(Map<String, dynamic> incoming, {bool autosave = true}) {
     if (incoming.isNotEmpty && incoming.containsKey("nom")) {
@@ -46,21 +47,9 @@ class MotivationState
       if (incoming.containsKey("date") && incoming["date"].isNotEmpty) {
         date = DateTime.parse(incoming["date"]);
       }
-      print("OOOOOYYYY Motivation state do something with $incoming.....");
-
-      //data.record.forEach((key, rec) {
-      //  if (incoming[key] is Map) {
-      //    data[key].note = incoming[key]["note"];
-      //    data[key].commentaire = incoming[key]["commentaire"];
-      //    if (incoming[key].containsKey("action")) {
-      //      data[key].action = incoming[key]["action"];
-      //    }
-      //  } else {
-      //    data[key].note = incoming[key];
-      //    data[key].commentaire = incoming["pkoi$key"];
-      //  }
-      //});
-
+      if (incoming.containsKey("data") && incoming["data"].isNotEmpty) {
+        data = MotivationData.fromMap(incoming["data"]);
+      }
       empty = false;
 
       if (autosave) {
@@ -69,28 +58,31 @@ class MotivationState
     }
   }
 
-  String toJson() {
+  Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
+      "type": "MotivationState",
       "nom": name,
       "prenom": familyname,
       "sport": sport,
       "date": date.toIso8601String(),
-      "data": data.record,
+      "data": data.toJson(),
       //TODO missing motivation
       //TODO missing objectives
       //TODO missing confidence
     };
-    return json.encode(map);
+    if(id >= 0) map['id'] = id;
+    return map;
   }
 
   MotivationState copyWith({String? name,
     String? familyname,
     String? sport,
     DateTime? date,
-    MotivationData? data
+    MotivationData? data, int? id
   })
   {
     return MotivationState(
+      id: id?? this.id,
       name: name?? this.name,
       familyname: familyname?? this.familyname,
       sport: sport?? this.sport,
@@ -99,41 +91,40 @@ class MotivationState
     );
   }
 
-  static fromJson(String json) {
-    var incom = jsonDecode(json);
-    if(incom is Map<String,dynamic>)
-    {
+  static fromJson(String jsonStr) {
+    //print("Motivation State fromJson incoming $jsonStr");
+    Map<String, dynamic> json = jsonDecode(jsonStr);
+    if(!json.containsKey("type") || json["type"] != "MotivationState") {
+      //print("MotivationState invalid json $jsonStr for ");
+      return MotivationState(name: "invalid");
+    }
 
-      Map<String, dynamic> map = jsonDecode(json);
-      DateTime date;
-      MotivationData data;
-      bool empty = false;
-      try
-      {
-        date = DateTime.parse(map["date"]);
-        data = MotivationData.fromMap(map["data"]);
-      }
-      catch(e)
-      {
-        date = DateTime.now();
-        data = MotivationData();
-        empty = true;
-      }
-      return MotivationState(
-        name : map["prenom"],
-        familyname : map["name"],
-        sport:  map["sport"],
-        date : date,
-        empty: empty,
-        data: data,
+    try
+    {
+      //print("success returning state ${json}");
+      //print("id ${json['id']}");
+      //print("prenom ${json['prenom']}");
+      //print("nom ${json['nom']}");
+      //print("sport ${json['sport']}");
+      //print("date ${DateTime.parse(json["date"])}");
+      //print("score ${MotivationData.fromJson(json["data"])}");
+      MotivationState res =
+      MotivationState(
+         id: json['id'] ?? -1,
+        name : json["prenom"]??"invalid",
+        familyname : json["nom"]??"",
+        sport:  json["sport"]??"",
+        date : DateTime.parse(json["date"]),
+        empty: false,
+        data: MotivationData.fromJson(json["data"]),
       );
+      return res;
     }
-    else
+    catch(e)
     {
-      return MotivationState();
+      print("dejson MotivationState failed!!");
+      return MotivationState(name: "invalid");
     }
-
-
   }
 
   void complete(Map<String, dynamic> map)
@@ -153,8 +144,7 @@ class MotivationState
         other.name == name &&
         other.familyname == familyname &&
         other.sport == sport &&
-        other.date == date &&
-        other.data == data;
+        other.date == date;
   }
 
   @override
@@ -166,45 +156,6 @@ class MotivationState
     data.hashCode;
   }
 
-  Map<Motivations,MotivationItemLabels> initLabels(loc)
-  {
-      labels =  {
-        Motivations.autonomy: MotivationItemLabels(
-          label: loc.autonomy_label,
-          caption: loc.autonomy_caption,
-          recipe: loc.autonomy_recipe,
-        ),
-        Motivations.competence: MotivationItemLabels(
-          label: loc.competence_label,
-          caption: loc.competence_caption,
-          recipe: loc.competence_recipe,
-        ),
-        Motivations.belonging:MotivationItemLabels(
-          label: loc.appartenance_label,
-          caption: loc.appartenance_caption,
-          recipe: loc.appartenance_recipe,
-        ),
-        Motivations.pleasure:MotivationItemLabels(
-          label: loc.plaisir_label,
-          caption: loc.plaisir_caption,
-          recipe: loc.plaisir_recipe,
-        ),
-        Motivations.progress:MotivationItemLabels(
-          label: loc.progres_label,
-          caption: loc.progres_caption,
-          recipe: loc.progres_recipe,
-        ),
-        Motivations.engagement:MotivationItemLabels(
-          label: loc.engagement_label,
-          caption: loc.engagement_caption,
-          recipe: loc.engagement_recipe,
-        ),
-        Motivations.meaning:MotivationItemLabels(
-          label: loc.sens_label,
-          caption: loc.sens_caption,
-          recipe: loc.sens_recipe,
-        ),
-      };
-    return labels!;
-  }
+  DateTime get normalizedDate => DateTime(date.year, date.month, date.day);
+
 }

@@ -1,4 +1,5 @@
-import 'package:preparation_mentale/core/motivation_data.dart';
+
+import 'motivation_data.dart';
 
 class MotivationItem {
   int note;
@@ -12,15 +13,19 @@ class MotivationItem {
   });
 
   static fromJson(Map<String, dynamic> json) {
-    return MotivationItem(
-      note: json['note']??-1,
-      commentary: json['commentary']??"",
-      action: json['action']??"",
-    );
+    if(json.containsKey('type') && json['type'] == 'MotivationItem') {
+      return MotivationItem(
+        note: json['note'] ?? -1,
+        commentary: json['commentary'] ?? "",
+        action: json['action'] ?? "",
+      );
+    }
+    return MotivationItem(note: -1);
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'type' : 'MotivationItem',
       'note': note,
       'commentary': commentary,
       'action': action,
@@ -33,20 +38,5 @@ class MotivationItem {
   }
 }
 
-class MotivationItemLabels {
-  String label;
-  String caption;
-  String recipe;
-
-  MotivationItemLabels({
-    required this.label,
-    required this.caption,
-    required this.recipe,
-  });
 
 
-  @override
-  String toString() {
-    return 'MotivationItem{label: $label, caption: $caption,  recipe: $recipe}';
-  }
-}

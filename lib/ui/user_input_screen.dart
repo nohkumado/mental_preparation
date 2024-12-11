@@ -5,6 +5,7 @@ import 'package:intl/intl.dart' as intl;
 import '../core/motivation_state.dart';
 import '../generated/l10n.dart';
 import '../rp_provider.dart';
+import 'motivation_item_labels.dart';
 
 class UserInputScreen extends ConsumerStatefulWidget {
   const UserInputScreen({super.key});
@@ -58,10 +59,9 @@ void initState() {
           decoration: InputDecoration(labelText: S.of(context).sport),
         ),
         const SizedBox(height: 16.0),
-        Text(intl.DateFormat.yMd().format(userState.date ?? DateTime.now())),
+        Text(intl.DateFormat.yMd().format(userState.date)),
         ElevatedButton(
           onPressed: () async {
-
             if (_validateForm(userState)) {
               _submitToDatabase(ref:ref, state:userState, context:context);
             } else {
@@ -69,17 +69,16 @@ void initState() {
                 SnackBar(content: Text(S.of(context).form_validation_error)),
               );
             }
-            // Save user data to database (use databaseProvider)
-            final db = ref.read(dataBaseProvider);
-            // ... database interaction code to save user
           },
           child: Text(S.of(context).save),
         ),
         // Dropdown for existing users
         motivationStatesAsync.when(
           data: (motivationStates) {
+            //print("retrieved $motivationStates " );
             if(userState.empty && motivationStates.isNotEmpty){
               userState = motivationStates.first;
+              //print("set empty userState to  $userState " );
             }
             return DropdownButton<MotivationState>(
             hint: Text(S.of(context).select_user),
@@ -90,9 +89,9 @@ void initState() {
                 controllers["name"]?.text = newValue.name;
                 controllers["familyname"]?.text = newValue.familyname;
                 controllers["sport"]?.text = newValue.sport;
-                if(newValue.labels == null || newValue.labels!.isEmpty){
-                  newValue.initLabels(S.of(context));
-                }
+                // if(MotivationItemLabels.labels == null || MotivationItemLabels.labels!.isEmpty){
+                //  MotivationItemLabels.initLabels(S.of(context));
+                // } //TODO noit needed anymore since we don't store uneccessary data
                 ref.read(userInputProvider.notifier).update(newValue);
                 ref.read(dataBaseProvider.notifier).upsertMotivationState(newValue);
               }
@@ -106,7 +105,7 @@ void initState() {
           );
           },
           loading: () => CircularProgressIndicator(),
-          error: (error, stack) => Text('Error loading users: $error'),
+          error: (error, stack) => Text('Error loading users: $error' ),
         ),
       ],
     );
@@ -115,10 +114,11 @@ void initState() {
     return state.name.isNotEmpty && state.familyname.isNotEmpty && state.sport.isNotEmpty;
   }
   void _submitToDatabase({required WidgetRef ref, required MotivationState state, required BuildContext context}) {
-    ref.read(dataBaseProvider.notifier).insertMotivationState(state).then((_) {
+    ref.read(dataBaseProvider.notifier).insertMotivationState(state).then((id) {
+    ref.read(userInputProvider.notifier).updateId(id);
       // Handle successful insertion
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).data_saved_successfully)),
+        SnackBar(content: Text(S.of(context).data_saved_successfully+ ' with id $id') ),
       );
     }).catchError((error) {
       // Handle error
