@@ -75,10 +75,10 @@ void initState() {
         // Dropdown for existing users
         motivationStatesAsync.when(
           data: (motivationStates) {
-            //print("retrieved $motivationStates " );
+            print("retrieved $motivationStates " );
             if(userState.empty && motivationStates.isNotEmpty){
               userState = motivationStates.first;
-              //print("set empty userState to  $userState " );
+              print("set empty userState to  $userState " );
             }
             return DropdownButton<MotivationState>(
             hint: Text(S.of(context).select_user),

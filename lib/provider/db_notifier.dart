@@ -40,21 +40,73 @@ Future<Database> get database async {
         data TEXT
       )
     ''');
+    //if (version >= 2) {
+    //await db.execute('ALTER TABLE motivation_state ADD COLUMN new_field TEXT');
+    //}
   }
+
+ // Future<void> removeDoubles(Database db) async {
+ //   await db.execute('''
+ // DELETE FROM motivation_state
+ // WHERE rowid NOT IN (
+ // SELECT MIN(rowid)
+ // FROM motivation_state
+ // GROUP BY name, familyname, sport, date
+ // );
+ //   ''');
+ // }
+  Future<void> removeDoubles(Database db) async {
+     print("Before removing duplicates:");
+  print(await db.rawQuery('SELECT * FROM motivation_state'));
+
+  await db.execute('''
+  DELETE FROM motivation_state
+  WHERE rowid NOT IN (
+    SELECT MIN(rowid)
+    FROM motivation_state
+    GROUP BY name, familyname, sport, 
+             strftime('%Y-%m-%d %H', datetime(date)) || ':' || 
+             (cast(strftime('%M', datetime(date)) as integer) / 15 * 15)
+  );
+  ''');
+
+  print("After removing duplicates:");
+  print(await db.rawQuery('SELECT * FROM motivation_state'));
+}
 
   Future<int> insertMotivationState(MotivationState state) async {
     if(state.id >= 0) return upsertMotivationState(state);
-    print("About to INSERT : $state");
+    DateFormat formatter = DateFormat("yyyy-MM-dd HH:mm");
+
     final db = await database;
-    //DateFormat formater = DateFormat("yyyy-MM-dd");
+    // Round the date to the nearest 15-minute interval
+  DateTime roundedDate = roundToNearest15Minutes(state.date);
+  String formattedDate = formatter.format(roundedDate);
+
+ // Check if a record with the same name, familyname, sport, and date already exists
+  final List<Map<String, dynamic>> existingRecords = await db.query(
+    'motivation_state',
+    where: '''name = ? AND familyname = ? AND sport = ? AND datetime(date) 
+        BETWEEN datetime(?, '-10 minutes') AND datetime(?, '+10 minutes')''',
+    whereArgs: [state.name, state.familyname, state.sport, formattedDate, formattedDate],
+  );
+
+  if (existingRecords.isNotEmpty) {
+     if(existingRecords.length >1) await removeDoubles(db);
+    // If a record exists, perform an upsert
+    return upsertMotivationState(state);
+  }
+
+
+
+
     Map<String,dynamic> toSave;
     try {
       toSave = {
         'name': state.name,
         'familyname': state.familyname,
         'sport': state.sport,
-        //'date': formater.format(state.date),
-        'date': state.date,
+        'date': formatter.format(state.date),
         'data': jsonEncode(state.toJson()),
       };
     }
@@ -62,22 +114,19 @@ Future<Database> get database async {
       print("Error while trying to encode $state : $e");
       return -1;
     }
-    print("################# saving $toSave ");
     final id = await db.insert('motivation_state', toSave );
-    print("Insertion yielded $id");
     return id;
   }
 Future<int> upsertMotivationState(MotivationState state) async {
-  print("About to UPSERT $state");
   final db = await database;
-  DateFormat formater = DateFormat("yyyy-MM-dd");
+  DateFormat formatter = DateFormat("yyyy-MM-dd");
 
   // Prepare the data to be inserted/updated
   final Map<String, dynamic> row = {
     'name': state.name,
     'familyname': state.familyname,
     'sport': state.sport,
-    'date': formater.format(state.date),
+    'date': formatter.format(state.date),
     'data': jsonEncode(state.toJson()),
   };
 
@@ -86,7 +135,7 @@ Future<int> upsertMotivationState(MotivationState state) async {
     'motivation_state',
     row,
     where: 'name = ? AND familyname = ? AND sport = ? AND date = ?',
-    whereArgs: [state.name, state.familyname, state.sport, state.date.toIso8601String()],
+    whereArgs: [state.name, state.familyname, state.sport, formatter.format(state.date)],
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
 
@@ -103,35 +152,20 @@ Future<int> upsertMotivationState(MotivationState state) async {
   return updatedRows;
 }
   Future<List<MotivationState>> getAllMotivationStates() async {
+    MotivationState.shortPrint = true;
     final db = await database;
     //final List<Map<String, dynamic>> maps = await db.query('motivation_state');
     var query = await db.query('motivation_state');
     List<Map<String, dynamic>> maps = query;
     //print("retrieved from DB : $maps");
 
-    //List<MotivationState> res =
-    //List.generate(maps.length, (i) {
-    //  print("entpacking : ${maps[i]['data']}");
-    //  MotivationState packed =  MotivationState.fromJson(maps[i]['data']);
-    //  if(packed.name == "invalid")
-    //    {
-    //      print("Excluding record $maps , need to remove id: ${maps[i]["id"]}");
-    //      continue;
-    //    }
-    //  print("got : ${packed} completing with rest");
-    //  packed.complete(maps[i]);
-    //  print("result : ${packed}");
-    //  return packed;
-    //});
     List<MotivationState> res = [];
     for (var map in maps) {
-      //print("unpacking: ${map['data']}");
-      MotivationState packed = MotivationState.fromJson(map['data']);
+      print("unpacking[${map['id']}]: ${map['data']} v:${map['data'] == null?'$map':''}");
+      MotivationState packed = map['data'] != null? MotivationState.fromJson(map['data']):MotivationState();
       packed.complete(map);
       if(packed.name == "invalid")
       {
-        //print("Excluding record: $packed");
-        //print("Excluding from $maps , need to remove id: ${map["id"]}");
         db.delete("motivation_state", where: "id = ?", whereArgs: [map["id"]]);
         continue; // Skip items based on the condition
       }
@@ -140,8 +174,19 @@ Future<int> upsertMotivationState(MotivationState state) async {
       //print("result: $packed");
       res.add(packed);
     }
-    //print("returning $res");
+    print("returning $res");
     return res;
+  }
+
+  DateTime roundToNearest15Minutes(DateTime dt)
+  {
+    return DateTime(
+      dt.year,
+      dt.month,
+      dt.day,
+      dt.hour,
+      (dt.minute ~/ 15) * 15,
+    );
   }
 
 

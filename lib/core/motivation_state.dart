@@ -20,6 +20,8 @@ class MotivationState
 
 
   int id = -1;
+
+  static bool shortPrint = false;
   //default CTOR
   MotivationState({
     this.id = -1,
@@ -33,6 +35,7 @@ class MotivationState
 
   @override
   String toString() {
+    if(shortPrint) return 'MS[$id]{name: $name, $familyname v $sport @$date}';
     return 'MotivationState[$id]{name: $name, familyname: $familyname, sport: $sport, date: $date, empty: $empty, data: $data}';
   } // building from incoming map
   String dbIdString() {
@@ -61,8 +64,8 @@ class MotivationState
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
       "type": "MotivationState",
-      "nom": name,
-      "prenom": familyname,
+      "nom": familyname,
+      "prenom": name,
       "sport": sport,
       "date": date.toIso8601String(),
       "data": data.toJson(),
@@ -102,9 +105,7 @@ class MotivationState
     try
     {
       //print("success returning state ${json}");
-      //print("id ${json['id']}");
-      //print("prenom ${json['prenom']}");
-      //print("nom ${json['nom']}");
+      print("id ,prenom ,nom: ${json['id']},${json['prenom']}, ${json['nom']}");
       //print("sport ${json['sport']}");
       //print("date ${DateTime.parse(json["date"])}");
       //print("score ${MotivationData.fromJson(json["data"])}");
@@ -129,12 +130,13 @@ class MotivationState
 
   void complete(Map<String, dynamic> map)
   {
-    if(map.containsKey('name') && name.isEmpty) {
+    //if(map.containsKey('name') && name.isEmpty) {
+      id = map['id'] ?? -1;
       name = map['name'];
       if(map.containsKey('familyname') && familyname.isEmpty) familyname = map['familyname'];
       if(map.containsKey('sport') && sport.isEmpty) sport = map['sport'];
       date = DateTime.parse(map['date']);
-    }
+    //}
   }
   @override
   bool operator ==(Object other) {

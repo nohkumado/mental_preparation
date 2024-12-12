@@ -18,21 +18,6 @@ final localeProvider = StateNotifierProvider<LocaleNotifier, LocaleState>((ref) 
 Future<S> lookupAppLocalizations(Locale locale) async {
   return await S.delegate.load(locale);
 }
-
-
- // final motivationDataProvider = Provider<List<MotivationItem>>((ref) async {
- //   final locale = await ref.watch(localeProvider);
- //  final appLocalizations = lookupAppLocalizations(locale); // Initialize with a default locale
- //   return MotivationData()..build(appLocalizations);
- //   ;
- // });
-
-// final motivationDataProvider = FutureProvider<MotivationData>((ref) async {
-//   final locale = ref.watch(localeProvider);
-//   await initializeMessages(locale.locale.languageCode);
-//  final appLocalizations = S(); // Initialize with a default locale
-//   return MotivationData()..build(appLocalizations);
-// });
 final motivationDataProvider = StateNotifierProvider<MotivationDataNotifier, MotivationData>((ref)
 => MotivationDataNotifier()
 );
@@ -46,11 +31,6 @@ final selectedIndexProvider = StateNotifierProvider<SelectedIndexNotifier, int>(
 final dataBaseProvider = StateNotifierProvider<DbNotifier, AsyncValue<MotivationState>>((ref) {
   return DbNotifier();
 });
-//// Create a provider to manage the list of motivation states
-//final motivationStatesProvider = FutureProvider<List<MotivationState>>((ref) {
-//  final dbNotifier = ref.read(dataBaseProvider.notifier);
-//  return dbNotifier.getAllMotivationStates();
-//});
 final motivationStatesProvider = FutureProvider<List<MotivationState>>((ref) async {
   final dbNotifier = ref.watch(dataBaseProvider.notifier);
   return await dbNotifier.getAllMotivationStates();

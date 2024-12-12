@@ -93,7 +93,6 @@ class QuestionnaireGeneral extends ConsumerWidget {
           )
         ),
         ElevatedButton(onPressed: () {
-          print("about to save $userState");
           //ref.read(userInputProvider.notifier).saveToDatabase();
           ref.read(dataBaseProvider.notifier).upsertMotivationState(userState).then((_) {
             // Handle successful insertion
